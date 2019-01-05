@@ -3,7 +3,7 @@
  */
 
 // Print ESP8266 response for debuging
-const boolean DEBUG = true;
+const boolean DEBUG = false;
 
 #include <SoftwareSerial.h>
 #include <Wire.h>
@@ -21,7 +21,7 @@ SoftwareSerial esp(RX, TX);
 DHT dht(DHTPIN, DHTTYPE);
 SFE_BMP180 bmp180;
 
-// Host abd port number for SSL connection
+// Host and port number for SSL connection
 const String HOST = "docs.google.com";
 const int PORT = 443;
 
@@ -65,6 +65,7 @@ void loop() {
   temperature_dht = dht.readTemperature();
 
   // Creating string with request to send to ESP8266
+  // Help: https://tttapa.github.io/ESP8266/Chap09%20-%20Web%20Server.html
   String request = "GET /forms/d/e/" + FORM_ID + "/formResponse?" + 
                    "entry.1105778885=" + String(temperature_bmp) +
                    "&entry.1094475896=" + String(temperature_dht) + 
@@ -72,7 +73,6 @@ void loop() {
                    "&entry.1330320364=" + String(humidity) +
                    "&submit=Submit HTTP/1.1\r\n" +
                    "Host: " + HOST + "\r\n" +
-                   "User-Agent: ESP8266\r\n" +
                    "Connection: close\r\n\r\n";
 
   // Setting SSL Buffer size - has to be large, 2048-4096
@@ -132,7 +132,7 @@ String readESP(const int timeout, String tail){
       }
     }
     if(find(message, tail)){
-      break;  // break while-loop if message contain tail
+      break;  // break while-loop if message contains tail
     }
   }
   return message;
