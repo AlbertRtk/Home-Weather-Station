@@ -2,6 +2,8 @@
  * 2019, Albert Ratajczak
  */
 
+// TODO: AT+CIPSEND search for > (not OK), or?
+
 // Print ESP8266 response for debuging
 const boolean DEBUG = false;
 
