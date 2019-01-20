@@ -6,15 +6,22 @@ from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from pprint import pprint
 
+import kivy
+kivy.require('1.10.1')
+
+from kivy.uix.floatlayout import FloatLayout
+from kivy.app import App
+from kivy.properties import ObjectProperty
+
 print('Weather Station App')
 SERVICE_ACCOUNT = 'service.json'
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 SPREADSHEET_ID = '1XR3SdMlfMPe3wa8Ch3fqPpbLMGnmUfp5aqusvrv2YeI'
 RANGE_NAME = 'Data!A2:E'
 
-print('building service')
-CREDS = Credentials.from_service_account_file(SERVICE_ACCOUNT, scopes=SCOPES)
-SERVICE = build('sheets', 'v4', credentials=CREDS)
+# print('building service')
+# CREDS = Credentials.from_service_account_file(SERVICE_ACCOUNT, scopes=SCOPES)
+# SERVICE = build('sheets', 'v4', credentials=CREDS)
 
 
 def get_weather_data():
@@ -32,6 +39,14 @@ def recent_weather():
             'Humidity': weather_data[-1][4]}
 
 
+class Weather(FloatLayout):
+    label_temperature = ObjectProperty()
+
+
+class WeatherApp(App):
+    def build(self):
+        return Weather()
+
+
 if __name__ == '__main__':
-    # pdb.set_trace()
-    pprint(recent_weather())
+    WeatherApp().run()
