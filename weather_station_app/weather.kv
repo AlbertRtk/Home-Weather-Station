@@ -12,6 +12,7 @@
         orientation: 'vertical'
         padding: 20
         canvas.before:
+            # Background color
             Color:
                 rgba: 1, 1, 1, .25
             Rectangle:
@@ -44,8 +45,8 @@
             font_size: '14sp'
             color: 0, 0, 0, 1
             valign: 'middle'
-            text: 'Updated: '
+            text: 'Last update: --'
 
         Button:
             text: 'Update'
-            on_press: root.update()
+            on_release: root.update()
