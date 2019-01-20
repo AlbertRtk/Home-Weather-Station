@@ -19,9 +19,9 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 SPREADSHEET_ID = '1XR3SdMlfMPe3wa8Ch3fqPpbLMGnmUfp5aqusvrv2YeI'
 RANGE_NAME = 'Data!A2:E'
 
-# print('building service')
-# CREDS = Credentials.from_service_account_file(SERVICE_ACCOUNT, scopes=SCOPES)
-# SERVICE = build('sheets', 'v4', credentials=CREDS)
+print('building service')
+CREDS = Credentials.from_service_account_file(SERVICE_ACCOUNT, scopes=SCOPES)
+SERVICE = build('sheets', 'v4', credentials=CREDS)
 
 
 def get_weather_data():
@@ -40,7 +40,17 @@ def recent_weather():
 
 
 class Weather(FloatLayout):
-    label_temperature = ObjectProperty()
+    temperature = ObjectProperty()
+    humidity = ObjectProperty()
+    pressure = ObjectProperty()
+    last_update = ObjectProperty()
+
+    def update(self):
+        weather = recent_weather()
+        self.temperature.text = weather['Temperature'] + ' °C'
+        self.humidity.text = weather['Humidity'] + '%'
+        self.pressure.text = weather['Pressure'] + ' hPa'
+        self.last_update.text = 'Updated: ' + weather['Date']
 
 
 class WeatherApp(App):
