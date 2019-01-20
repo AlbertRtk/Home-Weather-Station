@@ -7,6 +7,7 @@ kivy.require('1.10.1')
 from kivy.uix.floatlayout import FloatLayout
 from kivy.app import App
 from kivy.properties import ObjectProperty
+from kivy.clock import Clock
 
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
@@ -20,7 +21,8 @@ RANGE_NAME = 'Data!A2:E'
 
 # Getting credential for service account from JSON file
 CREDS = Credentials.from_service_account_file(SERVICE_ACCOUNT, scopes=SCOPES)
-SERVICE = None
+SERVICE = None  # will be build after pressing Update button
+                # > recent_weather > get_weather_data > build_global_service
 
 
 def build_global_service():
@@ -70,9 +72,8 @@ class Weather(FloatLayout):
 
     def update(self):
         """
-        Updates weather info and labels. Triggered by button
+        Updates weather info and labels. Triggered by Update button
         """
-        self.last_update.text = 'Updating...'  # TODO: solve the problem with label update
         weather = recent_weather()
         self.temperature.text = weather['Temperature'] + ' °C'
         self.humidity.text = weather['Humidity'] + '%'
