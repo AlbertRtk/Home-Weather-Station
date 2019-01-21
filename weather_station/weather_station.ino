@@ -2,10 +2,8 @@
  * 2019, Albert Ratajczak
  */
 
-// TODO: AT+CIPSEND search for > (not OK), or?
-
 // Print ESP8266 response for debuging
-const boolean DEBUG = false;
+const boolean DEBUG = true;
 
 #include <SoftwareSerial.h>
 #include <Wire.h>
@@ -84,7 +82,7 @@ void loop() {
   sendToESP("AT+CIPSTART=\"SSL\",\"" + HOST + "\"," + String(PORT), rtime, "OK");
   
   // Sending data to ESP8266 - setting the data length and passing request
-  sendToESP("AT+CIPSEND="+String(request.length()+2), rtime, "OK");
+  sendToESP("AT+CIPSEND="+String(request.length()+2), rtime, ">");
   sendToESP(request, rtime, "CLOSED");
 
   delay(900000);  // 15 min
@@ -101,41 +99,28 @@ boolean find(String string, String pattern){
 }
 
 
-String sendToESP(String command, const int timeout, String answer){
+void sendToESP(String command, const int timeout, String answer){
   /* Sends command to ESP8266 
    * Waits for timeout ms for response containing answer
    * Returns: String, response from ESP8266
   */
-  if(DEBUG){
-    Serial.println("\n>> ESP8266 request:");
-    Serial.println(command);
-    Serial.println();
-  }
-  esp.println(command);
-  return readESP(timeout, answer);
-}
-
-
-String readESP(const int timeout, String tail){
-  /* Reads response from ESP8266
-   * Waits for response for timeout ms
-   * Reads untim tail is found in the response
-   * Return: String, response from ESP8266
-  */
   char c;
   String message; 
   long int t = millis();
-  while((t+timeout)>=millis()){
-    while(esp.available()){  // ESP8266 sends data
-      c = esp.read();        // read byte
-      message += c;          // compose response  
-      if(DEBUG){
-        Serial.print(c);
-      }
+  
+  if(DEBUG)
+    Serial.println("\n\n>> ESP8266:"); 
+    
+  esp.println(command);
+  
+  while((t+timeout)>=millis()){ // while #1 - timeout
+    while(esp.available()){     // while #2 - ESP8266 sends data
+      c = esp.read();           // read byte
+      message += c;             // compose response  
+      if(DEBUG) 
+        Serial.print(c); 
     }
-    if(find(message, tail)){
-      break;  // break while-loop if message contains tail
-    }
+    if(find(message, answer))
+      break;  // break while-loop #1 if message contains answer
   }
-  return message;
 }
