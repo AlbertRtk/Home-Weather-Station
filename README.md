@@ -1,4 +1,4 @@
-#Home Weather Station
+# Home Weather Station
 
 Arduino based DIY weather station which measures temperature, pressure and humidity in define time intervals and sends the data to Google Sheet. Later, the data can be read by an app on your computer or phone (in development).
 
