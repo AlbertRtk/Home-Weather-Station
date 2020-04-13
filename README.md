@@ -35,6 +35,4 @@ AT+RST
 
 ## Weather station
 
-### Coming soon!
-
 [![Weather station scheme](https://raw.githubusercontent.com/AlbertRtk/home-weather-station/master/sketch/sketch_station.jpg "Weather station scheme")](https://raw.githubusercontent.com/AlbertRtk/home-weather-station/master/sketch/sketch_station.jpg "Weather station scheme")
